@@ -19,15 +19,56 @@
 // Should return:
 // 27
 
-const hungryRabbit = function(matrix) {
+const hungryRabbit = function (matrix) {
     let pos = findStartPos(matrix);
+    return findNext(matrix, pos[0], pos[1]);
 };
 
 
-const findStartPos = function(matrix) {
-    
-    let middleRow = matrix.length / 2;
+const findStartPos = function (matrix) {
+    let middleCol = [Math.floor(matrix[0].length / 2)];
+    let middleRow = [Math.floor(matrix.length / 2)];
     if (matrix[0].length % 2 === 0) {
-        let middleCol = matrix[0].length / 2;
+        middleCol.push(middleCol[0] - 1);
+    }
+    if (matrix.length % 2 === 0) {
+        middleRow.push(middleRow[0] - 1);
+    }
+    let max = 0;
+    let pos;
+    middleRow.forEach(row => {
+        middleCol.forEach(col => {
+            if (matrix[row][col] > max) {
+                max = matrix[row][col];
+                pos = [row, col];
+            }
+        });
+    });
+
+    return pos;
+};
+
+const findNext = function (matrix, row, col) {
+    const moves = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    let max = 0;
+    let next_row = null;
+    let next_col = null;
+    moves.forEach(move => {
+        if (row + move[0] >= 0 && row + move[0] < matrix[row].length) {
+            if (col + move[1] >= 0 && col + move[1] < matrix.length) {
+                if (max < matrix[(row + move[0])][(col + move[1])]) {
+                    max = matrix[(row + move[0])][(col + move[1])];
+                    next_row = row + move[0];
+                    next_col = col + move[1];
+                }
+            }
+        }
+    });
+    let carrots = matrix[row][col];
+    matrix[row][col] = 0;
+    if (max > 0 && next_col >= 0 && next_row >= 0) {
+        return carrots += findNext(matrix, next_row, next_col);
+    } else {
+        return carrots;
     }
 };
