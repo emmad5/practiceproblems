@@ -23,3 +23,11 @@ const hungryRabbit = function(matrix) {
     let pos = findStartPos(matrix);
 };
 
+
+const findStartPos = function(matrix) {
+    
+    let middleRow = matrix.length / 2;
+    if (matrix[0].length % 2 === 0) {
+        let middleCol = matrix[0].length / 2;
+    }
+};
